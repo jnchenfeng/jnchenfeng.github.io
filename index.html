@@ -158,25 +158,13 @@ var _hmt = _hmt || [];
     <article id="post-git-分支使用总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/25/git-分支使用总结/">git 分支使用总结</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/25/git-分支使用总结/" class="archive-article-date">
-  	<time datetime="2017-03-25T06:21:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#常用命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ git checkout -b 分支名（创建并切换分支）</div><div class="line">$ git checkout 分支名（切换分支）</div><div class="line">$ git merge 目标分支（同步目标分支到当前分支）</div><div class="line">$ git branch <span class="_">-d</span> 分支（删除分支）</div><div class="line">$ git branch (查看分支)</div><div class="line">$ git branch --merged（查看已经合并的分支，目录结构展示父子关系）</div><div class="line">$ git checkout -b sf origin/serverfix（检出远程分支并重名为本地分支）</div><div class="line">$ git checkout --track origin/serverfix（检出远程分支不重命名）</div><div class="line">$ git push [远程名] :[分支名]（删除远程分支）</div></pre></td></tr></table></figure></p>
-<p>#分支的衍合 rebase<br> 作用：找到分支的共同祖先，将其中一个分支的代码变化在另一个分支的重新衍化一遍</p>
+        <p>常用命令</p>
+<p> $ git checkout -b 分支名（创建并切换分支）<br>$ git checkout 分支名（切换分支）<br>$ git merge 目标分支（同步目标分支到当前分支）<br>$ git branch -d 分支（删除分支）<br>$ git branch (查看分支)<br>$ git branch –merged（查看已经合并的分支，目录结构展示父子关系）<br>$ git checkout -b sf origin/serverfix（检出远程分支并重名为本地分支）<br>$ git checkout –track origin/serverfix（检出远程分支不重命名）<br>$ git push [远程名] :[分支名]（删除远程分支）<br>分支的衍合 rebase</p>
+<p>作用：找到分支的共同祖先，将其中一个分支的代码变化在另一个分支的重新衍化一遍<br>$ git rebase master<br>它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行衍合的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游，如图 3-29 所示：</p>
+<p>$ git rebase –onto master server client<br>这好比在说：“取出 client 分支，找出 client 分支和 server 分支的共同祖先之后的变化，然后把它们在 master 上重演一遍”。是不是有点复杂？不过它的结果如图 3-32 所示，非常酷（译注：虽然 client 里的 C8, C9 在 C3 之后，但这仅表明时间上的先后，而非在 C3 修改的基础上进一步改动，因为 server 和 client 这两个分支对应的代码应该是两套文件，虽然这么说不是很严格，但应理解为在 C3 时间点之后，对另外的文件所做的 C8，C9 修改，放到主干重演。）：</p>
+<p>注意：一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。</p>
 
       
 

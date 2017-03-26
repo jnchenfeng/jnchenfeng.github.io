@@ -171,7 +171,7 @@ var _hmt = _hmt || [];
 <h2 id="分支的衍合-rebase"><a href="#分支的衍合-rebase" class="headerlink" title="分支的衍合 rebase"></a>分支的衍合 rebase</h2><p>作用：找到分支的共同祖先，将其中一个分支的代码变化在另一个分支的重新衍化一遍<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git rebase master</div></pre></td></tr></table></figure></p>
 <p>它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行衍合的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游，如图 3-29 所示：<br><img src="http://hybrid.xiaoying.tv/template/20160730/21212323/2017-03-25-15-26-30.jpg" alt="3-29"></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git rebase --onto master server client</div></pre></td></tr></table></figure>
-<p>这好比在说：“取出 client 分支，找出 client 分支和 server 分支的共同祖先之后的变化，然后把它们在 master 上重演一遍”。是不是有点复杂？不过它的结果如图 3-32 所示，非常酷（译注：虽然 client 里的 C8, C9 在 C3 之后，但这仅表明时间上的先后，而非在 C3 修改的基础上进一步改动，因为 server 和 client 这两个分支对应的代码应该是两套文件，虽然这么说不是很严格，但应理解为在 C3 时间点之后，对另外的文件所做的 C8，C9 修改，放到主干重演。）：<br><img src="http://hybrid.xiaoying.tv/template/20160730/21212323/2017-03-25-15-27-09.jpg" alt="3-32"><br>注意：一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。</p>
+<p>这好比在说：“取出 client 分支，找出 client 分支和 server 分支的共同祖先之后的变化，然后把它们在 master 上重演一遍”。是不是有点复杂？不过它的结果如图 3-32 所示，非常酷（译注：虽然 client 里的 C8, C9 在 C3 之后，但这仅表明时间上的先后，而非在 C3 修改的基础上进一步改动，因为 server 和 client 这两个分支对应的代码应该是两套文件，虽然这么说不是很严格，但应理解为在 C3 时间点之后，对另外的文件所做的 C8，C9 修改，放到主干重演。）：<br><img src="http://hybrid.xiaoying.tv/template/20160730/21212323/2017-03-25-15-27-09.jpg" alt="3-32"><br><strong>注意：一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。</strong></p>
 
       
 
